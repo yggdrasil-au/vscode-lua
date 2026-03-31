@@ -2,7 +2,7 @@
 
 # 1. Initialize Submodules and Build Server (Ref: make.bat)
 Write-Host "--- Initializing Submodules and Building Server ---" -ForegroundColor Cyan
-git submodule update --init --recursive
+# git submodule update --init --recursive
 
 Set-Location "server"
 Set-Location "3rd\luamake"

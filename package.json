@@ -2,9 +2,9 @@
 	"name": "lua-moonsharp",
 	"author": "yggdrasil-au",
 	"license": "MIT",
-	"description": "port of sumneko lua https://github.com/LuaLS/lua-language-server, for the Remake Engine (moonsharp) lua development",
+	"description": "fork of sumneko lua https://github.com/LuaLS/lua-language-server, for the Remake Engine (moonsharp) lua development",
 	"displayName": "Lua",
-	"version": "3.17.2",
+	"version": "3.17.3-B",
 	"engines": {
 		"vscode": "^1.86.0"
 	},
@@ -16,6 +16,12 @@
 		"moonsharp"
 	],
 	"main": "./client/out/src/extension",
+
+	"publisher": "yggdrasil-au",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/yggdrasil-au/vscode-lua"
+	},
 
 	"activationEvents": [
 		"onLanguage:lua",
