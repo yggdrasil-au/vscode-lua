@@ -1,10 +1,27 @@
 {
+	"name": "lua-moonsharp",
+	"author": "yggdrasil-au",
+	"license": "MIT",
+	"description": "port of sumneko lua https://github.com/LuaLS/lua-language-server, for the Remake Engine (moonsharp) lua development",
+	"displayName": "Lua",
+	"version": "3.17.2",
+	"engines": {
+		"vscode": "^1.86.0"
+	},
+	"icon": "images/logo.png",
+	"keywords": [
+		"Lua",
+		"IntelliSense",
+		"Remake Engine",
+		"moonsharp"
+	],
+	"main": "./client/out/src/extension",
+
 	"activationEvents": [
 		"onLanguage:lua",
 		"onWebviewPanel:lua-doc",
 		"onCommand:extension.lua.doc"
 	],
-	"author": "sumneko",
 	"capabilities": {
 		"untrustedWorkspaces": {
 			"description": "",
@@ -3444,28 +3461,5 @@
 				}
 			}
 		]
-	},
-	"description": "Lua Language Server coded by Lua",
-	"displayName": "Lua",
-	"engines": {
-		"vscode": "^1.86.0"
-	},
-	"icon": "images/logo.png",
-	"keywords": [
-		"Lua",
-		"IntelliSense",
-		"EmmyLua"
-	],
-	"license": "MIT",
-	"main": "./client/out/src/extension",
-	"name": "lua",
-	"publisher": "sumneko",
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/LuaLS/lua-language-server"
-	},
-	"sponsor": {
-		"url": "https://github.com/LuaLS/lua-language-server/issues/484"
-	},
-	"version": "3.17.1"
+	}
 }

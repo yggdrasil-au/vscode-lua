@@ -1,7 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as vscode from 'vscode';
-import { defaultClient } from '../languageserver';
+import { defaultClient } from '../languageserver.ts';
 
 const LANGUAGE_ID = "lua";
 /**
@@ -117,7 +117,7 @@ class PsiViewer {
     private requestPsiImpl(editor: vscode.TextEditor) {
         const client = defaultClient?.client;
         const params = { uri: editor.document.uri.toString() };
-        client?.sendRequest<{ data: unknown }>("$/psi/view", params).then(result => {
+        client?.sendRequest<{ data: any }>("$/psi/view", params).then((result: { data: any } | null) => {
             if (result) {
                 this.post({
                     type: "psi",
@@ -130,7 +130,7 @@ class PsiViewer {
     private requestPsiSelect(position: vscode.Position, uri: vscode.Uri) {
         const client = defaultClient?.client;
         const params = { uri: uri.toString(), position };
-        client?.sendRequest<{ data: unknown }>("$/psi/select", params).then(result => {
+        client?.sendRequest<{ data: any }>("$/psi/select", params).then((result: { data: any } | null) => {
             if (result) {
                 this.post({
                     type: "psi_select",

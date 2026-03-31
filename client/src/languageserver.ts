@@ -20,7 +20,7 @@ import {
     LSPAny,
     ExecuteCommandRequest,
     TransportKind,
-} from 'vscode-languageclient/node';
+} from 'vscode-languageclient/node.js';
 
 export let defaultClient: LuaClient | null;
 let outputChannel: vscode.OutputChannel | undefined;
@@ -85,8 +85,8 @@ function registerCustomCommands(context: ExtensionContext) {
     context.subscriptions.push(Commands.registerCommand('lua.reloadFFIMeta', async () => {
         defaultClient?.client?.sendRequest(ExecuteCommandRequest.type, {
             command: 'lua.reloadFFIMeta',
-        })
-    }))
+        });
+    }));
 
     context.subscriptions.push(Commands.registerCommand('lua.startServer', async () => {
         deactivate();
@@ -119,9 +119,9 @@ function registerCustomCommands(context: ExtensionContext) {
 
 /** Creates a new {@link LuaClient} and starts it. */
 export const createClient = (context: ExtensionContext) => {
-    defaultClient = new LuaClient(context, [{ language: 'lua' }])
+    defaultClient = new LuaClient(context, [{ language: 'lua' }]);
     defaultClient.start();
-}
+};
 
 class LuaClient extends Disposable {
     public client: LanguageClient | undefined;
@@ -316,7 +316,7 @@ class LuaClient extends Disposable {
             })
         );
         this.disposables.push(
-            client.onNotification("$/status/report", (params) => {
+            client.onNotification("$/status/report", (params: { text: string; tooltip: string }) => {
                 bar.text = params.text;
                 bar.tooltip = params.tooltip;
             })
@@ -330,7 +330,7 @@ class LuaClient extends Disposable {
             return;
         }
         this.disposables.push(
-            this.client.onNotification("$/command", (params) => {
+            this.client.onNotification("$/command", (params: { command: string; data: any }) => {
                 Commands.executeCommand(params.command, params.data);
             })
         );
@@ -367,7 +367,7 @@ class LuaClient extends Disposable {
 
         let configuration: Disposable | undefined;
         this.disposables.push(
-            this.client.onNotification('$/languageConfiguration', (params) => {
+            this.client.onNotification('$/languageConfiguration', (params: { id: string; configuration: any }) => {
                 configuration?.dispose();
                 configuration = vscode.languages.setLanguageConfiguration(params.id, convertStringsToRegex(params.configuration));
                 this.disposables.push(configuration);
@@ -378,7 +378,7 @@ class LuaClient extends Disposable {
     private provideHover() {
         const client = this.client;
         const levelMap = new WeakMap<vscode.VerboseHover, number>();
-        let provider = vscode.languages.registerHoverProvider('lua', {
+        const provider = vscode.languages.registerHoverProvider('lua', {
             provideHover: async (document, position, token, context?: vscode.HoverContext) => {
                 if (!client) {
                     return null;
@@ -394,21 +394,24 @@ class LuaClient extends Disposable {
                     level: level,
                     ...client.code2ProtocolConverter.asTextDocumentPositionParams(document, position),
                 }
-                return client?.sendRequest(
-                    LSP.HoverRequest.type,
+                return client?.sendRequest<LSP.Hover | null>(
+                    'textDocument/hover',
                     params,
                     token,
-                ).then((result) => {
+                ).then((result: LSP.Hover | null) => {
                     if (token.isCancellationRequested) {
                         return null;
                     }
                     if (result === null) {
                         return null;
                     }
-                    let verboseResult = result as LSP.Hover & { maxLevel?: number };
-                    let maxLevel = verboseResult.maxLevel ?? 0;
-                    let hover = client.protocol2CodeConverter.asHover(result);
-                    let verboseHover = new vscode.VerboseHover(
+                    const verboseResult = result as LSP.Hover & { maxLevel?: number };
+                    const maxLevel = verboseResult.maxLevel ?? 0;
+                    const hover = client.protocol2CodeConverter.asHover(result);
+                    if (!hover) {
+                        return null;
+                    }
+                    const verboseHover = new vscode.VerboseHover(
                         hover.contents,
                         hover.range,
                         level < maxLevel,
@@ -419,14 +422,14 @@ class LuaClient extends Disposable {
                     }
                     levelMap.set(verboseHover, level);
                     return verboseHover;
-                }, (error) => {
+                }, (error: any) => {
                     return client.handleFailedRequest(LSP.HoverRequest.type, token, error, null);
                 });
             }
-        })
-        this.disposables.push(provider)
+        });
+        this.disposables.push(provider);
     }
-}
+};
 
 export function activate(context: ExtensionContext) {
     registerCustomCommands(context);
@@ -460,7 +463,7 @@ export async function deactivate() {
     }
     return undefined;
 }
-vscode.SyntaxTokenType.String
+
 export async function reportAPIDoc(params: unknown) {
     if (!defaultClient) {
         return;
