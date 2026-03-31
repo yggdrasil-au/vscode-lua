@@ -249,5 +249,5 @@
     "config.workspace.preloadFileSize": "Skip files larger than this value (KB) when preloading.",
     "config.workspace.supportScheme": "Provide language server for the Lua files of the following scheme.",
     "config.workspace.useGitIgnore": "Ignore files list in `.gitignore` .",
-    "config.workspace.userThirdParty": "Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/LuaLS/lua-language-server/tree/master/meta/3rd)"
+    "config.workspace.userThirdParty": "Add private third-party library configuration file paths here, please refer to the built-in [configuration file path](https://github.com/LuaLS/lua-language-server/tree/main/meta/submodules)"
 }

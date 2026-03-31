@@ -1,23 +1,23 @@
 **/*
 
-!client/node_modules
-!client/out
-!client/package.json
-!client/3rd/vscode-lua-doc/doc
-!client/3rd/vscode-lua-doc/extension.js
-!client/webvue/build
+!submodules/client/node_modules
+!submodules/client/out
+!submodules/client/package.json
+!submodules/vscode-lua-doc/doc
+!submodules/vscode-lua-doc/extension.js
+!submodules/client/webvue/build
 
-!server/bin
-!server/locale
-!server/script
-!server/main.lua
-!server/main.lua
-!server/debugger.lua
-!server/changelog.md
-!server/LICENSE
-!server/meta/3rd
-!server/meta/template
-!server/meta/spell
+!submodules/server/bin
+!submodules/server/locale
+!submodules/server/script
+!submodules/server/main.lua
+!submodules/server/main.lua
+!submodules/server/debugger.lua
+!submodules/server/changelog.md
+!submodules/server/LICENSE
+!submodules/server/meta/submodules
+!submodules/server/meta/template
+!submodules/server/meta/spell
 
 !images/logo.png
 

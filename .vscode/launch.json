@@ -3,28 +3,12 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "发布",
-            "type": "lua",
-            "request": "launch",
-            "stopOnEntry": false,
-            "program": "${workspaceRoot}/publish.lua",
-            "arg": [
-            ],
-            "sourceCoding": "utf8",
-            "luaexe": "${workspaceFolder}/server/bin/lua-language-server.exe",
-            "outputCapture": [
-                "print",
-                "stderr",
-            ],
-        },
-        {
-            "name": "导出配置文件",
+            "name": "Export configuration file ",
             "type": "lua",
             "request": "launch",
             "stopOnEntry": false,
             "program": "${workspaceRoot}/build-settings.lua",
-            "arg": [
-            ],
+            "arg": [],
             "luaexe": "${workspaceFolder}/server/bin/lua-language-server.exe",
             "sourceCoding": "utf8",
             "outputCapture": [

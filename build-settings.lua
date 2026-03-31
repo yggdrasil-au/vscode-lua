@@ -13,6 +13,8 @@ local lloader       = require 'locale-loader'
 local diagd         = require 'proto.diagnostic'
 local util          = require 'utility'
 
+-- ... [addSplited and copyWithNLS functions remain unchanged] ...
+
 local function addSplited(t, key, value)
     t[key] = value
     for pos in key:gmatch '()%.' do
@@ -56,6 +58,7 @@ local encodeOption = {
     newline = '\r\n',
     indent  = '    ',
 }
+
 local function mergeDiagnosticGroupLocale(locale)
     for groupName, names in pairs(diagd.diagnosticGroups) do
         local key = ('config.diagnostics.%s'):format(groupName)
@@ -68,15 +71,23 @@ local function mergeDiagnosticGroupLocale(locale)
     end
 end
 
+print("Starting schema and NLS generation...")
+print("--------------------------------------")
+
+local count = 0
 for dirPath in fs.pairs(fs.path 'server/locale') do
     local lang    = dirPath:filename():string()
     local nlsPath = dirPath / 'setting.lua'
-    local text    = fsu.loadFile(nlsPath)
+    
+    io.write(string.format("[%s] Processing... ", lang))
+    
+    local text = fsu.loadFile(nlsPath)
     if not text then
+        print("SKIP (setting.lua not found)")
         goto CONTINUE
     end
+    
     local nls = lloader(text, nlsPath:string())
-    -- add `config.diagnostics.XXX`
     mergeDiagnosticGroupLocale(nls)
 
     local setting = {
@@ -104,5 +115,14 @@ for dirPath in fs.pairs(fs.path 'server/locale') do
 
     fsu.saveFile(fs.path(schemaName), json.beautify(setting, encodeOption))
     fsu.saveFile(fs.path(nlsName),    json.beautify(nls, encodeOption))
+    
+    print("DONE")
+    print(string.format("    => Saved %s", schemaName))
+    print(string.format("    => Saved %s", nlsName))
+    
+    count = count + 1
     ::CONTINUE::
 end
+
+print("--------------------------------------")
+print(string.format("Finished! Processed %d languages.", count))

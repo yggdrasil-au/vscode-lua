@@ -3,10 +3,13 @@
 /publish/
 /luadoc/out/
 /ovsx-token
+
 node_modules/
+
 .history/
 *.vsix
 pnpm-lock.yaml
+
 
 **/submodules/**
 **/server/**
