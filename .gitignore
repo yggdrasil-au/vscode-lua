@@ -1,6 +1,8 @@
 /client/node_modules
 /client/out/
 /publish/
+/Build/
+/Build/TMP/
 /luadoc/out/
 /ovsx-token
 

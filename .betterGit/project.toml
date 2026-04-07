@@ -1,6 +1,6 @@
 major = 3
 minor = 17
-patch = 7
+patch = 8
 isAlpha = false
 isBeta = true
 isNodeProject = true
@@ -8,3 +8,9 @@ isNodeProject = true
 name = "origin"
 isPublic = false
 group = "github"
+[[remotes]]
+name = "Fork"
+group = "Mirrors"
+provider = "github"
+branch = "master"
+isPublic = true

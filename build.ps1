@@ -89,7 +89,8 @@ if (!(Test-Path "package.json")) { Write-Error "Root package.json not found!"; e
 
 $packageJson = Get-Content "package.json" | ConvertFrom-Json
 $version = $packageJson.version
-$publishDir = "publish/test"
+# temp output folder
+$publishDir = "Build/TMP"
 
 if (Test-Path $publishDir) { Remove-Item -Recurse -Force $publishDir }
 New-Item -ItemType Directory -Path $publishDir | Out-Null
