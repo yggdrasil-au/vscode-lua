@@ -1,48 +1,48 @@
-# lua-moonsharp (VS Code Extension)
+# lua-language-server (fork)
 
-Fork of LuaLS for Remake Engine (Moonsharp) Lua development in VS Code.
+This README documents the top-level items currently in this directory.
+If a purpose is not clear from repository contents, it is listed as UNKNOWN.
 
-This repository packages three main pieces:
-- A VS Code client extension (TypeScript, in `submodules/client`).
-- A Lua language server backend (in `submodules/server`).
-- Embedded Lua/Moonsharp documentation content (in `submodules/vscode-lua-doc`).
+## Directories
 
-## Folder Purpose (Root)
-
-- `submodules/`: Core runtime components (client, server, documentation).
-- `setting/`: Generated VS Code configuration schemas.
-- `package/`: Build-time Lua scripts that transform `package.json` metadata.
-- `make/`: Utility scripts for local copy/deploy tasks.
-- `.vscode/`: Local development launch/task settings.
-- `Build/`: Temporary packaging output (`Build/TMP`) used during VSIX creation.
-
-## Provided Files And Why They Exist
-
-| File | Purpose in this folder |
+| Name | Purpose |
 | --- | --- |
-| `package.json` | Extension identity, VS Code contributions, activation events, and entrypoint (`submodules/client/out/src/extension`). |
-| `tsconfig.json` | Root TypeScript configuration and project reference to the client package. |
-| `pnpm-workspace.yaml` | Declares workspace packages for pnpm monorepo behavior (`client`). |
-| `build.ps1` | End-to-end build script: builds server/client, generates localization/schema files, stages package contents into `Build/TMP`, and creates the VSIX. |
-| `build-settings.lua` | Generates `setting/schema*.json` and `package.nls*.json` from server locale/configuration sources. |
-| `.vscodeignore` | Defines the exact file set included in extension packaging when using `vsce`. |
-| `.gitmodules` | Declares git submodules used by this extension (`submodules/server`, `submodules/client`, `submodules/vscode-lua-doc`). |
-| `.gitignore` | Excludes generated artifacts, staging outputs, and large submodule content from normal git tracking. |
-| `.vscode/launch.json` | Debug profiles for extension host and configuration export workflow. |
-| `.vscode/tasks.json` | Workspace build task definitions (notably client build task). |
-| `.vscode/settings.json` | Local Lua extension defaults for developing this repository. |
+| `setting` | contains generated json schemas for validating the .luarc.json, .luarc.jsonc files |
+| `bin` | Built server binaries and runtime bootstrap files. |
+| `build` | Build artifacts and intermediate outputs. |
+| `doc` | User-facing documentation content. |
+| `locale` | Localization files used by the server. |
+| `log` | Runtime and test log outputs/samples. |
+| `lua` | Symbolic link to `script`; reason for link is UNKNOWN. |
+| `make` | Build helper sources and platform-specific build inputs. |
+| `meta` | API/type metadata used for completion and analysis. |
+| `script` | Core Lua language server implementation. |
+| `submodules` | External source dependencies pulled as git submodules. |
+| `test` | Test cases and fixtures. |
+| `tools` | Utility scripts for maintenance/build data generation. |
 
-# unused, from sumenko lsp
-| `package/build.lua` | Build-time script that updates `package.json` version/contributions from Lua-side sources. |
-| `package/semanticTokenScope.lua` | Semantic token scope mapping consumed when generating package metadata. |
-| `make/copy.lua` | Utility script to copy compiled server binaries into an installed extension directory for local testing. |
+## Files
 
+| Name | Purpose |
+| --- | --- |
+| `.editorconfig` | Editor formatting and indentation rules. |
+| `.gitignore` | Git ignore rules for generated files/artifacts. |
+| `.gitmodules` | Git submodule declarations and source URLs. |
+| `.luarc.json` | Lua language server development settings for this repo. |
+| `.make.bat` | Windows helper script to initialize submodules and run `luamake`. |
+| `.pre-commit-hooks.yaml` | Pre-commit hook config to run Lua checks. |
+| `debugger.lua` | Optional debug bootstrap used in development mode. |
+| `Dockerfile` | Linux container definition for building the server toolchain. |
+| `errors.json` | UNKNOWN (stored diagnostics JSON sample/output). |
+| `LICENSE` | Project license text (MIT). |
+| `lua-language-server` | Launcher script that runs `main.lua` via `bee`. |
+| `lua-language-server-scm-1.rockspec` | LuaRocks package manifest for the server distribution. |
+| `main.lua` | Main server entrypoint and process initialization. |
+| `make.lua` | Primary `luamake` build script for native/server targets. |
+| `package.json` | Minimal package metadata (`name` and `version`). |
+| `README.md` | This documentation file. |
+| `test.lua` | Test runner entrypoint for local/server test execution. |
+| `theme-tokens.md` | Reference documentation for syntax/semantic token scopes. |
+| `zig-cc-wrapper.sh` | Wrapper script to call `zig c++` while filtering incompatible flags. |
 
-## Build And Packaging Summary
-
-1. Build server dependencies and server binaries from `submodules/server`.
-2. Build the client from `submodules/client`.
-3. Generate localization and schema artifacts via `build-settings.lua`.
-4. Copy runtime files into `Build/TMP` staging directory.
-5. Package VSIX from staging output.
 

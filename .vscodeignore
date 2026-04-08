@@ -5,7 +5,6 @@
 !submodules/client/package.json
 !submodules/vscode-lua-doc/doc
 !submodules/vscode-lua-doc/extension.js
-!submodules/client/webvue/build
 
 !submodules/server/bin
 !submodules/server/locale

@@ -143,7 +143,7 @@ for dirPath in fs.pairs(fs.path 'submodules/server/locale') do
     end
 
     fsu.saveFile(fs.path(schemaName), json.beautify(setting, encodeOption))
-    fsu.saveFile(fs.path(nlsName),    json.beautify(nls, encodeOption))
+    fsu.saveFile(fs.path("Build/TMP/" .. nlsName),    json.beautify(nls, encodeOption))
 
     print("DONE")
     print(string.format("    => Saved %s", schemaName))

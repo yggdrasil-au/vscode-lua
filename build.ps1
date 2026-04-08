@@ -63,7 +63,22 @@ pnpm run build
 Pop-Location
 
 
-# 3. Build Localisation Files
+
+# 3. Prepare Publish Directory
+Write-Host "`n--- Preparing Distribution Folder ---" -ForegroundColor Cyan
+if (!(Test-Path "package.json")) { Write-Error "Root package.json not found!"; exit 1 }
+
+$packageJson = Get-Content "package.json" | ConvertFrom-Json
+$version = $packageJson.version
+# temp output folder
+$publishDir = "Build/TMP"
+
+if (Test-Path $publishDir) { Remove-Item -Recurse -Force $publishDir }
+New-Item -ItemType Directory -Path $publishDir | Out-Null
+
+
+
+# 4. Build Localisation Files
 Write-Host "`n--- Building Localisation Files ---" -ForegroundColor Cyan
 $serverExe = ".\submodules\server\bin\lua-language-server.exe"
 $buildScript = ".\build-settings.lua"
@@ -83,17 +98,6 @@ if (Test-Path $serverExe) {
 }
 
 
-# 4. Prepare Publish Directory
-Write-Host "`n--- Preparing Distribution Folder ---" -ForegroundColor Cyan
-if (!(Test-Path "package.json")) { Write-Error "Root package.json not found!"; exit 1 }
-
-$packageJson = Get-Content "package.json" | ConvertFrom-Json
-$version = $packageJson.version
-# temp output folder
-$publishDir = "Build/TMP"
-
-if (Test-Path $publishDir) { Remove-Item -Recurse -Force $publishDir }
-New-Item -ItemType Directory -Path $publishDir | Out-Null
 
 # Update README using server path in submodules
 if (Test-Path "submodules/server/README.md") {
@@ -104,7 +108,6 @@ if (Test-Path "submodules/server/README.md") {
 # 5. Copy Files to Staging
 Write-Host "Copying files to $publishDir..." -ForegroundColor Yellow
 
-# Updated list reflecting submodules folder and new vscode-lua-doc location
 $includeList = @(
     "LICENSE",
     "submodules/client/node_modules",
@@ -123,11 +126,28 @@ $includeList = @(
     "submodules/server/meta/submodules",
     "submodules/server/meta/spell",
     "images/logo.png",
-    "syntaxes",
+    "setting",
     "package.json",
-    "README.md",
-    "package.nls.json"
+    "README.md"
 )
+
+# --- Validation Step ---
+Write-Host "Validating $includeList..." -ForegroundColor Yellow
+$missingItems = @()
+foreach ($item in $includeList) {
+    if (!(Test-Path (Join-Path $PSScriptRoot $item))) {
+        $missingItems += $item
+    }
+}
+
+if ($missingItems.Count -gt 0) {
+    Write-Error "The following required files/folders are missing:"
+    foreach ($missing in $missingItems) {
+        Write-Host "  - $missing" -ForegroundColor Red
+    }
+    exit 1
+}
+Write-Host "All required files/folders found." -ForegroundColor Green
 
 foreach ($item in $includeList) {
     $source = Join-Path $PSScriptRoot $item
@@ -144,6 +164,44 @@ foreach ($item in $includeList) {
     }
 }
 
+# Copy the docs webview module into the location expected by the compiled client.
+$docSource = Join-Path $PSScriptRoot "submodules/vscode-lua-doc"
+$docDestination = Join-Path $publishDir "client/vscode-lua-doc"
+
+if (Test-Path $docSource) {
+    if (!(Test-Path $docDestination)) { New-Item -ItemType Directory -Path $docDestination | Out-Null }
+    Copy-Item -Path (Join-Path $docSource "doc") -Destination (Join-Path $docDestination "doc") -Recurse -Force
+    Copy-Item -Path (Join-Path $docSource "extension.js") -Destination (Join-Path $docDestination "extension.js") -Force
+}
+
+# Rewrite the staged package manifest so the packaged extension entrypoint matches the staged layout.
+$packageJson | ConvertTo-Json -Depth 100 | Set-Content (Join-Path $publishDir "package.json")
+
+# Stage an ignore file that matches the packaged layout.
+@'
+**/*
+!client/node_modules
+!client/out
+!client/package.json
+!client/web
+!client/vscode-lua-doc/doc
+!client/vscode-lua-doc/extension.js
+!server/bin
+!server/doc
+!server/locale
+!server/script
+!server/main.lua
+!server/debugger.lua
+!server/meta/submodules
+!server/meta/template
+!server/meta/spell
+!images/logo.png
+!setting
+!package.json
+!README.md
+!LICENSE
+'@ | Set-Content (Join-Path $publishDir ".vscodeignore")
+
 # 5. Cleanup
 # Updated cleanup paths to match stripped destination paths
 $cleanupList = @("server/log", "server/meta/Lua 5.4 zh-cn")
@@ -156,6 +214,7 @@ foreach ($item in $cleanupList) {
 Write-Host "`n--- Packaging VSIX ---" -ForegroundColor Cyan
 if (Get-Command vsce -ErrorAction SilentlyContinue) {
     $vsixName = "lua-$version.vsix"
+    Write-Host "Creating $vsixName in $publishDir..." -ForegroundColor Yellow
     Push-Location $publishDir
     vsce package -o "../../$vsixName"
     Pop-Location
