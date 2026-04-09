@@ -146,7 +146,6 @@ $itemsToCopy = @{
     "submodules/client/resources"           = "resources"
     "submodules/client/dist"                = "dist"
 
-
     "setting" = "setting"
 
     # Server Structure
@@ -156,12 +155,13 @@ $itemsToCopy = @{
     "submodules/server/script"              = "server/script"
     "submodules/server/main.lua"            = "server/main.lua"
     "submodules/server/debugger.lua"        = "server/debugger.lua"
-    "submodules/server/test"                = "server/test"
-    "submodules/server/test.lua"            = "server/test.lua"
-    "submodules/server/changelog.md"        = "server/changelog.md"
-    "submodules/server/meta/template"       = "server/meta/template"
-    "submodules/server/meta/submodules"     = "server/meta/3rd"
-    "submodules/server/meta/spell"          = "server/meta/spell"
+    #"submodules/server/test"                = "server/test"
+    #"submodules/server/test.lua"            = "server/test.lua"
+    "submodules/server/meta"                = "server/meta"
+    #"submodules/server/meta/template"       = "server/meta/template"
+    #"submodules/server/meta/submodules"     = "server/meta/3rd"
+    #"submodules/server/meta/submodules"     = "server/meta/submodules"
+    #"submodules/server/meta/spell"          = "server/meta/spell"
 }
 
 # 1. Copy explicit items
@@ -207,6 +207,9 @@ foreach ($item in $cleanupList) {
 
 # 7. Package VSIX
 if (-not $isAuto) {
+    Write-Host "`n--- deleting old vsix ---" -ForegroundColor Cyan
+    Get-ChildItem -Path $PSScriptRoot -Filter "lua-*.vsix" | Remove-Item -Force
+
     Write-Host "`n--- Packaging VSIX ---" -ForegroundColor Cyan
     if (Get-Command vsce -ErrorAction SilentlyContinue) {
         $vsixName = "lua-$version.vsix"
