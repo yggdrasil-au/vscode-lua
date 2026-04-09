@@ -1,8 +1,7 @@
 param(
-    [string]$Mode = ""
+    [switch]$Auto,
+    [switch]$NoPrompt
 )
-
-$isAuto = ($Mode -eq "auto")
 
 # 1. Initialize Submodules and Build Server exe
 Write-Host "--- Initializing Submodules and Building Server exe ---" -ForegroundColor Cyan
@@ -13,13 +12,18 @@ $serverExe = Join-Path $serverPath "bin/lua-language-server.exe"
 $buildServer = $true
 
 if (Test-Path $serverExe) {
-    if ($isAuto) {
+    if ($Auto) {
         Write-Host "Auto mode detected: dont rebuilding server." -ForegroundColor Yellow
         $buildServer = $false
     } else {
         Write-Host "Existing server executable found at $serverExe." -ForegroundColor Yellow
 
-        $choice = Read-Host "Rebuild the server exe? [r]ebuild / [s]kip (default: skip)"
+        if ($noPrompt) {
+            Write-Host "No-prompt mode detected: running with rebuild." -ForegroundColor Yellow
+            $choice = "r"
+        } else {
+            $choice = Read-Host "Rebuild the server exe? [r]ebuild / [s]kip (default: skip)"
+        }
         if ([string]::IsNullOrWhiteSpace($choice)) {
             $choice = "s"
         }
@@ -208,7 +212,7 @@ foreach ($item in $cleanupList) {
 }
 
 # 7. Package VSIX
-if (-not $isAuto) {
+if (-not $Auto) {
     Write-Host "`n--- deleting old vsix ---" -ForegroundColor Cyan
     Get-ChildItem -Path $PSScriptRoot -Filter "lua-*.vsix" | Remove-Item -Force
 

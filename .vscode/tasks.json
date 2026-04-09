@@ -40,9 +40,12 @@
             "problemMatcher": []
         },
 		{
-            "label": "build",
+            "label": "Fullbuild",
             "type": "shell",
             "command": "./build.ps1",
+            "args": [
+                "noprompt"
+            ],
             "options": {
                 "cwd": "${workspaceFolder}"
             },
