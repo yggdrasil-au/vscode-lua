@@ -93,11 +93,12 @@ if (Test-Path $serverPath) {
 
 # 2. Build Client
 Write-Host "`n--- Building VS Code Extension Client ---" -ForegroundColor Cyan
-# Updated path to submodules/client
-Push-Location "submodules/client"
-pnpm install
-pnpm run prod
-Pop-Location
+if (-not (Get-Command deno -ErrorAction SilentlyContinue)) {
+    Write-Error "Deno is not installed or not available on PATH."
+    exit 1
+}
+
+deno task prod
 
 
 

@@ -3,5 +3,6 @@
     "Lua.workspace.library": {
         "server/script-beta": true
     },
-    "Lua.workspace.checkThirdParty": false
+    "Lua.workspace.checkThirdParty": false,
+    "deno.enable": true
 }

@@ -4,26 +4,26 @@
 		{
 			"label": "build-extension1",
 			"type": "shell",
-			"command": "pnpm",
+			"command": "deno",
 			"args": [
-				"run",
+				"task",
 				"build"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/submodules/client"
+				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": []
 		},
 		{
 			"label": "build-extension3",
 			"type": "shell",
-			"command": "pnpm",
+			"command": "deno",
 			"args": [
-				"run",
+				"task",
 				"prod"
 			],
 			"options": {
-				"cwd": "${workspaceFolder}/submodules/client"
+				"cwd": "${workspaceFolder}"
 			},
 			"problemMatcher": []
 		},
