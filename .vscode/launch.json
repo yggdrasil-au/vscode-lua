@@ -6,8 +6,14 @@
             "name": "Run Extension",
             "type": "extensionHost",
             "request": "launch",
+            "runtimeExecutable": "${execPath}",
+            "preLaunchTask": "build-extension",
             "args": [
-                "--extensionDevelopmentPath=${workspaceFolder}/Build/TMP/"
+                "--extensionDevelopmentPath=${workspaceFolder}/submodules/client",
+                "--profile=ExtensionDevHost"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/submodules/client/dist/**/*.js"
             ]
         },
     ]
