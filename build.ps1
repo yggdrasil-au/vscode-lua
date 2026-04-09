@@ -4,8 +4,8 @@ param(
 
 $isAuto = ($Mode -eq "auto")
 
-# 1. Initialize Submodules and Build Server
-Write-Host "--- Initializing Submodules and Building Server ---" -ForegroundColor Cyan
+# 1. Initialize Submodules and Build Server exe
+Write-Host "--- Initializing Submodules and Building Server exe ---" -ForegroundColor Cyan
 
 # Updated path to submodules/server
 $serverPath = Join-Path $PSScriptRoot "submodules/server"
@@ -19,7 +19,7 @@ if (Test-Path $serverExe) {
     } else {
         Write-Host "Existing server executable found at $serverExe." -ForegroundColor Yellow
 
-        $choice = Read-Host "Rebuild the server? [r]ebuild / [s]kip (default: skip)"
+        $choice = Read-Host "Rebuild the server exe? [r]ebuild / [s]kip (default: skip)"
         if ([string]::IsNullOrWhiteSpace($choice)) {
             $choice = "s"
         }
@@ -36,6 +36,8 @@ if (Test-Path $serverExe) {
         }
     }
 }
+
+## the Lua language server exe is only used to run the server/scripts/*.lua it contains no lua language logic
 
 if (Test-Path $serverPath) {
     if ($buildServer) {
@@ -152,7 +154,7 @@ $itemsToCopy = @{
     "submodules/server/bin"                 = "server/bin"
     "submodules/server/doc"                 = "server/doc"
     "submodules/server/locale"              = "server/locale"
-    "submodules/server/script"              = "server/script"
+    "submodules/server/script"              = "server/script"  ## the Lua Language Server Main Source executed by the language server executable
     "submodules/server/main.lua"            = "server/main.lua"
     "submodules/server/debugger.lua"        = "server/debugger.lua"
     #"submodules/server/test"                = "server/test"
