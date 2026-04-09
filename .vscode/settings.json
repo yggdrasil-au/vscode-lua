@@ -1,8 +1,3 @@
 {
-    "Lua.runtime.version": "Lua 5.4",
-    "Lua.workspace.library": {
-        "server/script-beta": true
-    },
-    "Lua.workspace.checkThirdParty": false,
     "deno.enable": true
 }
