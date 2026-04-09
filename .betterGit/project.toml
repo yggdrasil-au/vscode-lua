@@ -6,11 +6,5 @@ isBeta = true
 isNodeProject = false
 [[remotes]]
 name = "origin"
-isPublic = false
-group = "github"
-[[remotes]]
-name = "Fork"
-group = "Mirrors"
-provider = "github"
-branch = "master"
 isPublic = true
+group = "github"
