@@ -8,13 +8,7 @@
 	path = submodules/client
 	url = https://github.com/yggdrasil-au/vscode-lua-client
 
-
 ## Documentation for Lua and Moonsharps Lua
 [submodule "submodules/vscode-lua-doc"]
 	path = submodules/vscode-lua-doc
 	url = https://github.com/yggdrasil-au/vscode-lua-doc
-
-##
-#[submodule "client/webvue"]
-#	path = client/webvue
-#	url = https://github.com/LuaLS/vscode-lua-webvue
