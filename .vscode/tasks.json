@@ -38,6 +38,15 @@
                 "cwd": "${workspaceFolder}"
             },
             "problemMatcher": []
+        },
+		{
+            "label": "build",
+            "type": "shell",
+            "command": "./build.ps1",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": []
         }
     ]
 }
