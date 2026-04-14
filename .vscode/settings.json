@@ -1,3 +1,10 @@
 {
-    "deno.enable": true
+    "deno.enable": true,
+    "Lua.runtime.version": "Lua 5.2",
+    "Lua.workspace.library": [
+        "${submodules}/remake-engine",
+        "${submodules}/moonsharp",
+        "./EngineApps/api_definitions",
+        "./submodules/server/moonsharpRuntime/api_definitions.lua",
+    ],
 }

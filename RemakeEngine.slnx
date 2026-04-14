@@ -1,0 +1,6 @@
+<Solution>
+
+	<Project Path="submodules\server\moonsharpRuntime\moonsharpy.csproj" />
+	<Project Path="submodules\server\moonsharpRuntime\moonsharpy.ScriptEngines.csproj" />
+
+</Solution>

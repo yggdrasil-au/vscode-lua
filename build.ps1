@@ -92,6 +92,21 @@ if (Test-Path $serverPath) {
         }
     } else {
         Write-Host "Skipping server rebuild at user request." -ForegroundColor Yellow
+
+        $bootstrapLua = Join-Path $serverPath "make/bootstrap.lua"
+        $serverMainLua = Join-Path $serverPath "bin/main.lua"
+
+        if (Test-Path $bootstrapLua) {
+            $serverBinDir = Split-Path $serverMainLua
+            if (!(Test-Path $serverBinDir)) {
+                New-Item -ItemType Directory -Path $serverBinDir | Out-Null
+            }
+
+            Copy-Item -Path $bootstrapLua -Destination $serverMainLua -Force
+            Write-Host "Refreshed server main.lua from bootstrap.lua." -ForegroundColor Green
+        } else {
+            Write-Warning "bootstrap.lua not found at $bootstrapLua. Skipping main.lua refresh."
+        }
     }
 } else {
     Write-Warning "Server directory not found at $serverPath. Skipping server build."
@@ -105,6 +120,30 @@ if (-not (Get-Command deno -ErrorAction SilentlyContinue)) {
 }
 
 deno task prod
+
+# 2b. Build Moonsharp Host
+Write-Host "`n--- Building Moonsharp Host ---" -ForegroundColor Cyan
+if (-not (Get-Command dotnet -ErrorAction SilentlyContinue)) {
+    Write-Error "dotnet is not installed or not available on PATH."
+    exit 1
+}
+
+$moonsharpProject = Join-Path $PSScriptRoot "submodules/server/moonsharpRuntime/moonsharpy.csproj"
+if (Test-Path $moonsharpProject) {
+    Push-Location $PSScriptRoot
+    & dotnet publish $moonsharpProject -c Release -r win-x64 --self-contained true -o $serverPath/bin
+    $moonsharpExit = $LASTEXITCODE
+    Pop-Location
+
+    if ($moonsharpExit -ne 0) {
+        Write-Error "Moonsharp host publish failed with Exit Code: $moonsharpExit"
+        exit $moonsharpExit
+    }
+
+    Write-Host "Moonsharp host published successfully!" -ForegroundColor Green
+} else {
+    Write-Warning "Moonsharp host project not found. Skipping Moonsharp publish step."
+}
 
 
 
