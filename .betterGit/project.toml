@@ -4,6 +4,7 @@ patch = 7
 isAlpha = false
 isBeta = true
 isNodeProject = false
+isDenoProject = true
 [[remotes]]
 name = "origin"
 isPublic = true
