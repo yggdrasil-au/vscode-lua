@@ -6,5 +6,75 @@
         "${submodules}/moonsharp",
         "./EngineApps/api_definitions",
         "./submodules/server/moonsharpRuntime/api_definitions.lua",
+        "./submodules/server/meta/submodules/moonsharp",
     ],
+    "Lua.diagnostics.disable": [
+        "close-non-object",
+        "incomplete-signature-doc",
+        "missing-global-doc",
+        "missing-local-export-doc"
+    ],
+    "Lua.diagnostics.groupFileStatus": {
+        "ambiguity": "Any",
+        "await": "Any",
+        "duplicate": "Any",
+        "global": "Any",
+        "luadoc": "Any",
+        "redefined": "Any",
+        "strict": "Any",
+        "type-check": "Any",
+        "unbalanced": "Any",
+        "unused": "Any"
+    },
+    "Lua.diagnostics.unusedLocalExclude": [ "_*" ],
+
+    "Lua.runtime.path": [
+        "./script/?.lua",
+        "./script/?/init.lua",
+        "./?.lua",
+        "./submodules/server/script/?.lua",
+        "./submodules/server/script/?/init.lua",
+        "./submodules/server/?.lua",
+        "./submodules/server/bin/?.lua",
+        "./submodules/server/make/?.lua",
+    ],
+    "Lua.runtime.pathStrict": false,
+
+    "Lua.misc.parameters": [
+        //"--preview",
+        "--develop=true",
+        "--dbgport=11413",
+        "--loglevel=trace",
+        //"--shownode",
+        //"--lazy",
+    ],
+    "files.associations": {
+        "thread": "cpp"
+    },
+
+    "Lua.workspace.maxPreload": 1600,
+    "Lua.workspace.preloadFileSize": 1000,
+    "Lua.workspace.ignoreDir": [
+        "./submodules/server/locale/",
+        "./submodules/server/libs/",
+        "./submodules/server/submodules/",
+        "./submodules/server/3rd",
+        "./submodules/server/.vscode",
+        "./submodules/server/meta"
+    ],
+    "Lua.workspace.checkThirdParty": false,
+
+    "Lua.typeFormat.config": {
+        "format_line": "false"
+    },
+
+    "Lua.type.castNumberToInteger": false,
+
+    "Lua.doc.privateName": [
+        "_*"
+    ],
+    "Lua.diagnostics.globals": [
+        "log"
+    ]
+
 }

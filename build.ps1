@@ -92,24 +92,24 @@ if (Test-Path $serverPath) {
         }
     } else {
         Write-Host "Skipping server rebuild at user request." -ForegroundColor Yellow
-
-        $bootstrapLua = Join-Path $serverPath "make/bootstrap.lua"
-        $serverMainLua = Join-Path $serverPath "bin/main.lua"
-
-        if (Test-Path $bootstrapLua) {
-            $serverBinDir = Split-Path $serverMainLua
-            if (!(Test-Path $serverBinDir)) {
-                New-Item -ItemType Directory -Path $serverBinDir | Out-Null
-            }
-
-            Copy-Item -Path $bootstrapLua -Destination $serverMainLua -Force
-            Write-Host "Refreshed server main.lua from bootstrap.lua." -ForegroundColor Green
-        } else {
-            Write-Warning "bootstrap.lua not found at $bootstrapLua. Skipping main.lua refresh."
-        }
     }
 } else {
     Write-Warning "Server directory not found at $serverPath. Skipping server build."
+}
+
+$bootstrapLua = Join-Path $serverPath "bootstrap.lua"
+$serverMainLua = Join-Path $serverPath "bin/main.lua"
+
+if (Test-Path $bootstrapLua) {
+    $serverBinDir = Split-Path $serverMainLua
+    if (!(Test-Path $serverBinDir)) {
+        New-Item -ItemType Directory -Path $serverBinDir | Out-Null
+    }
+
+    Copy-Item -Path $bootstrapLua -Destination $serverMainLua -Force
+    Write-Host "Refreshed server main.lua from bootstrap.lua." -ForegroundColor Green
+} else {
+    Write-Warning "bootstrap.lua not found at $bootstrapLua. Skipping main.lua refresh."
 }
 
 # 2. Build Client
@@ -171,9 +171,21 @@ New-Item -ItemType Directory -Path $publishDir | Out-Null
 
 # 4. Build Localisation Files
 Write-Host "`n--- Building Localisation Files ---" -ForegroundColor Cyan
+$buildDocScript = Join-Path $serverPath "tools/build-doc.lua"
 $buildScript = ".\build-settings.lua"
 
 if (Test-Path $serverExe) {
+    if (Test-Path $buildDocScript) {
+        Write-Host "Running $buildDocScript..." -ForegroundColor Gray
+        Push-Location $serverPath
+        & $serverExe "tools/build-doc.lua"
+        $buildDocExit = $LASTEXITCODE
+        Pop-Location
+        if ($buildDocExit -ne 0) { Write-Error "Documentation build failed!"; exit $buildDocExit }
+    } else {
+        Write-Warning "build-doc.lua not found at $buildDocScript. Skipping documentation build."
+    }
+
     Write-Host "Running $buildScript..." -ForegroundColor Gray
     & $serverExe $buildScript
     if ($LASTEXITCODE -ne 0) { Write-Error "Localisation build failed!"; exit $LASTEXITCODE }
@@ -256,13 +268,27 @@ if (-not $Auto) {
     Get-ChildItem -Path $PSScriptRoot -Filter "lua-*.vsix" | Remove-Item -Force
 
     Write-Host "`n--- Packaging VSIX ---" -ForegroundColor Cyan
-    if (Get-Command vsce -ErrorAction SilentlyContinue) {
-        $vsixName = "lua-$version.vsix"
-        Push-Location $publishDir
-        vsce package -o "../../$vsixName"
-        Pop-Location
-        Write-Host "Successfully created $vsixName" -ForegroundColor Green
+    $vscePath = Join-Path $PSScriptRoot "submodules/client/node_modules/.bin/vsce.ps1"
+    if (!(Test-Path $vscePath)) {
+        Write-Error "VSCE not found at $vscePath. Run 'pnpm install' in submodules/client first."
+        exit 1
     }
+
+    $vsixName = "lua-$version.vsix"
+    $vsixOutput = Join-Path $PSScriptRoot $vsixName
+    $publishDirPath = Join-Path $PSScriptRoot $publishDir
+
+    Push-Location $publishDirPath
+    & $vscePath package -o $vsixOutput
+    $vsceExit = $LASTEXITCODE
+    Pop-Location
+
+    if ($vsceExit -ne 0) {
+        Write-Error "VSCE packaging failed with Exit Code: $vsceExit"
+        exit $vsceExit
+    }
+
+    Write-Host "Successfully created $vsixName" -ForegroundColor Green
 } else {
     Write-Host "`n--- Skipping VSIX Packaging (Auto Mode) ---" -ForegroundColor Yellow
 }

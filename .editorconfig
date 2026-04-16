@@ -1,0 +1,48 @@
+root = true
+
+# C# files
+[*.cs]
+
+
+indent_size = 4
+indent_style = space
+tab_width = 4
+
+
+# Disable "Qualifier is redundant" (e.g., this.member)
+resharper_redundant_this_qualifier_highlighting = none
+resharper_redundant_base_qualifier_highlighting = none
+# To allow redundant type name qualifiers
+resharper_redundant_name_qualifier_highlighting = none
+
+dotnet_diagnostic.IDE0051.severity = warning
+
+
+# Disable Naming convention warnings
+dotnet_diagnostic.IDE0130.severity = none
+dotnet_diagnostic.IDE1006.severity = none
+dotnet_analyzer_diagnostic.category-Naming.severity = none
+resharper_naming_rule_violation_highlighting = none
+
+
+dotnet_diagnostic.IDE0001.severity = none
+dotnet_diagnostic.IDE0002.severity = none
+
+# IDE0008: Use explicit type
+csharp_style_var_elsewhere = false
+resharper_csharp_use_explicit_type_highlighting = none
+
+# IDE0090: Use 'new(...)'
+dotnet_diagnostic.IDE0090.severity = none
+
+# IDE0028: Use collection expression
+dotnet_diagnostic.IDE0028.severity = none
+
+# Keep Win32-style constants intact without analyzer noise.
+dotnet_diagnostic.IDE0008.severity = none
+
+# Default severity for analyzer diagnostics with category 'Style'
+dotnet_analyzer_diagnostic.category-Style.severity = none
+
+# Default severity for all analyzer diagnostics
+dotnet_analyzer_diagnostic.severity = none

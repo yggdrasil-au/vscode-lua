@@ -28,20 +28,16 @@
     - locale-loader  (Lua-based NLS parser)
 ----------------------------------------------------------------------------]]--
 
-local fs = require 'bee.filesystem'
+local fs = require 'bee.filesystem' -- runtime built-in module for filesystem operations
 
-local currentPath = debug.getinfo(1, 'S').source:sub(2)
-local rootPath = currentPath:gsub('[^/\\]-$', '')
-package.path = package.path
-    .. ';' .. rootPath .. 'submodules/server/script/?.lua' -- contains json-beautify, fs-utility, locale-loader, proto/diagnostic.lua, and utility
-    .. ';' .. rootPath .. 'submodules/server/tools/?.lua' -- contains configuration
-
-local configuration = require 'configuration'
-local json          = require 'json-beautify'
-local fsu           = require 'fs-utility'
-local lloader       = require 'locale-loader'
-local diagd         = require 'proto.diagnostic'
-local util          = require 'utility'
+-- submodules\server\tools\*.lua
+local configuration = require 'tools.configuration'
+-- submodules\server\script\*.lua
+local json          = require 'script.json-beautify'
+local fsu           = require 'script.fs-utility'
+local lloader       = require 'script.locale-loader'
+local diagd         = require 'script.proto.diagnostic'
+local util          = require 'script.utility'
 
 local packagePath = 'submodules/client/package.json'
 local packageEncodeOption = {
