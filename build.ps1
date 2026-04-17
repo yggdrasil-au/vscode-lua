@@ -45,6 +45,18 @@ if (Test-Path $serverExe) {
 
 if (Test-Path $serverPath) {
     if ($buildServer) {
+        $makeDir = Join-Path $serverPath "make"
+        $makeBootstrapLua = Join-Path $makeDir "bootstrap.lua"
+        if (!(Test-Path $makeDir)) {
+            New-Item -ItemType Directory -Path $makeDir | Out-Null
+        }
+        if (Test-Path $bootstrapLua) {
+            Copy-Item -Path $bootstrapLua -Destination $makeBootstrapLua -Force
+            Write-Host "Refreshed server make/bootstrap.lua from bootstrap.lua." -ForegroundColor Green
+        } else {
+            Write-Warning "bootstrap.lua not found at $bootstrapLua. Skipping make/bootstrap.lua refresh."
+        }
+
         # 1. Build luamake (Dependency)
         # Using Push/Pop to ensure we don't lose our place in the folder structure
         Push-Location (Join-Path $serverPath "submodules/luamake")
@@ -209,7 +221,8 @@ $itemsToCopy = @{
     "submodules/server/bin"                 = "server/bin"
     "submodules/server/doc"                 = "server/doc"
     "submodules/server/locale"              = "server/locale"
-    "submodules/server/script"              = "server/script"  ## the Lua Language Server Main Source executed by the language server executable
+    "submodules/server/script"              = "server/script"
+    "submodules/server/bootstrap.lua"       = "server/bootstrap.lua"
     "submodules/server/main.lua"            = "server/main.lua"
     "submodules/server/debugger.lua"        = "server/debugger.lua"
     #"submodules/server/test"                = "server/test"
