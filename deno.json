@@ -5,7 +5,8 @@
         "prod": "cd submodules/client && deno run --allow-read=. --allow-write=. --allow-run --allow-env npm:esbuild ./src/extension.ts --bundle --outfile=dist/extension.js --external:vscode --format=cjs --platform=node --minify",
         "lint": "cd submodules/client && deno lint src/",
         "check": "cd submodules/client && deno check src/",
-        "fmt": "cd submodules/client && deno fmt src/"
+        "fmt": "cd submodules/client && deno fmt src/",
+        "test:lsp": "deno test --allow-read=. --allow-run --allow-env submodules/client/tests/lsp_smoke_test.ts"
     },
     "fmt": {
         "include": ["submodules/client/src/"],

@@ -11,6 +11,9 @@ $serverPath = Join-Path $PSScriptRoot "submodules/server"
 $serverExe = Join-Path $serverPath "bin/lua-language-server.exe"
 $buildServer = $true
 
+$bootstrapLua = Join-Path $serverPath "bootstrap.lua"
+$serverMainLua = Join-Path $serverPath "bin/main.lua"
+
 if (Test-Path $serverExe) {
     if ($Auto) {
         Write-Host "Auto mode detected: dont rebuilding server." -ForegroundColor Yellow
@@ -46,12 +49,13 @@ if (Test-Path $serverExe) {
 if (Test-Path $serverPath) {
     if ($buildServer) {
         $makeDir = Join-Path $serverPath "make"
-        $makeBootstrapLua = Join-Path $makeDir "bootstrap.lua"
+        #$makeBootstrapLua = Join-Path $makeDir "bootstrap.lua"
         if (!(Test-Path $makeDir)) {
             New-Item -ItemType Directory -Path $makeDir | Out-Null
         }
         if (Test-Path $bootstrapLua) {
-            Copy-Item -Path $bootstrapLua -Destination $makeBootstrapLua -Force
+            # for now we dont copy this
+            #Copy-Item -Path $bootstrapLua -Destination $makeBootstrapLua -Force
             Write-Host "Refreshed server make/bootstrap.lua from bootstrap.lua." -ForegroundColor Green
         } else {
             Write-Warning "bootstrap.lua not found at $bootstrapLua. Skipping make/bootstrap.lua refresh."
@@ -108,9 +112,6 @@ if (Test-Path $serverPath) {
 } else {
     Write-Warning "Server directory not found at $serverPath. Skipping server build."
 }
-
-$bootstrapLua = Join-Path $serverPath "bootstrap.lua"
-$serverMainLua = Join-Path $serverPath "bin/main.lua"
 
 if (Test-Path $bootstrapLua) {
     $serverBinDir = Split-Path $serverMainLua
@@ -225,13 +226,7 @@ $itemsToCopy = @{
     "submodules/server/bootstrap.lua"       = "server/bootstrap.lua"
     "submodules/server/main.lua"            = "server/main.lua"
     "submodules/server/debugger.lua"        = "server/debugger.lua"
-    #"submodules/server/test"                = "server/test"
-    #"submodules/server/test.lua"            = "server/test.lua"
     "submodules/server/meta"                = "server/meta"
-    #"submodules/server/meta/template"       = "server/meta/template"
-    #"submodules/server/meta/submodules"     = "server/meta/3rd"
-    #"submodules/server/meta/submodules"     = "server/meta/submodules"
-    #"submodules/server/meta/spell"          = "server/meta/spell"
 }
 
 # 1. Copy explicit items

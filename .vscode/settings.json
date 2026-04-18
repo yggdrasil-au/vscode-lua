@@ -4,9 +4,13 @@
     "Lua.workspace.library": [
         "${submodules}/remake-engine",
         "${submodules}/moonsharp",
-        "./EngineApps/api_definitions",
-        "./submodules/server/moonsharpRuntime/api_definitions.lua",
-        "./submodules/server/meta/submodules/moonsharp",
+        "EngineApps/api_definitions",
+        "submodules/server/moonsharpRuntime/api_definitions.lua",
+        "submodules/server/meta/submodules/moonsharp",
+        "submodules/server/*.lua",
+        "submodules/server/bin/",
+        "submodules/server/script/",
+        "submodules/server/script/**/",
     ],
     "Lua.diagnostics.disable": [
         "close-non-object",
@@ -29,14 +33,15 @@
     "Lua.diagnostics.unusedLocalExclude": [ "_*" ],
 
     "Lua.runtime.path": [
-        "./script/?.lua",
-        "./script/?/init.lua",
-        "./?.lua",
-        "./submodules/server/script/?.lua",
-        "./submodules/server/script/?/init.lua",
-        "./submodules/server/?.lua",
-        "./submodules/server/bin/?.lua",
-        "./submodules/server/make/?.lua",
+        "script/?.lua",
+        "script/?/init.lua",
+        "?.lua",
+        "submodules/server/script/?.lua",
+        "submodules/server/script/?/?.lua",
+        "submodules/server/script/?/init.lua",
+        "submodules/server/?.lua",
+        "submodules/server/bin/?.lua",
+        "submodules/server/make/?.lua",
     ],
     "Lua.runtime.pathStrict": false,
 
@@ -55,12 +60,14 @@
     "Lua.workspace.maxPreload": 1600,
     "Lua.workspace.preloadFileSize": 1000,
     "Lua.workspace.ignoreDir": [
-        "./submodules/server/locale/",
-        "./submodules/server/libs/",
-        "./submodules/server/submodules/",
-        "./submodules/server/3rd",
-        "./submodules/server/.vscode",
-        "./submodules/server/meta"
+        "submodules/server/locale/",
+        "submodules/server/.old/**/",
+        "submodules/server/libs",
+        "submodules/server/submodules",
+        "submodules/server/submodules/**/",
+        "submodules/server/3rd",
+        "submodules/server/.vscode",
+        "submodules/server/meta"
     ],
     "Lua.workspace.checkThirdParty": false,
 
